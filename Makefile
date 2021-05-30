@@ -1,9 +1,9 @@
 # NAME:    PC performance test
-# VERSION: 0.0.1
+# VERSION: 0.0.2
 # AUTHOR:  MAROUSEK S.
 # DATE:    2021/5/30
 
-CFLAGS+= -Wall -Werror -std=gnu99 -g
+CFLAGS+= -Wall -Werror -std=gnu99 -o0
 LDFLAGS=-pthread
 
 BINARIES=test
