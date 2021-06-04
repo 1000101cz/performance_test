@@ -130,7 +130,7 @@ int main()
 	printf("\r%lld", divide);
 	printf("\r");
 	printf("Memory access score   %f\n",
-	       (float)(number_of_operations / (RUN_TIME / 100) / 5));
+	       ((float)number_of_operations / (RUN_TIME / 100) / 5));
 
 	/* Exit */
 	if (remove(bench_txt)) {
