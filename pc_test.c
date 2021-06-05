@@ -25,6 +25,8 @@
 #include <time.h>
 
 #define RUN_TIME 10000		// ms
+#define NUMBER_CYCLES 18
+#define NUMBER_THREADS 5
 
 void *threadTimeCount(void *);
 void *thread1(void *);
@@ -50,11 +52,11 @@ long long computationThread(long long number_o_o, _Bool *threadC)
 	long long divide;
 	while (*threadC) {
 		divide = 1 + number_o_o;
-		for (int i = 1; i <= 18; i++) {
+		for (int i = 1; i <= NUMBER_CYCLES; i++) {
 			divide = divide * i;
 			divide++;
 		}
-		for (int i = 1; i <= 18; i++) {
+		for (int i = 1; i <= NUMBER_CYCLES; i++) {
 			divide--;
 			divide = divide / i;
 		}
@@ -68,8 +70,8 @@ int main(int argc, char *argv[])
 	FILE *save_data;
 	void *(*thr_function[])(void *) =
 	    { threadTimeCount, thread1, thread2, thread3, thread4 };
-	pthread_t threads[5];
-	for (int i = 0; i < 5; i++) {
+	pthread_t threads[NUMBER_THREADS];
+	for (int i = 0; i < NUMBER_THREADS; i++) {
 		pthread_create(&threads[i], NULL, thr_function[i], NULL);
 	}
 
@@ -97,7 +99,7 @@ int main(int argc, char *argv[])
 
 	printf("Computation score     %f\n",
 	       (float)(number_of_operations / RUN_TIME / 18.9));
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < NUMBER_THREADS; i++) {
 		pthread_detach(threads[i]);
 		pthread_join(threads[i], NULL);
 	}
@@ -105,13 +107,13 @@ int main(int argc, char *argv[])
 	save_data = fopen(bench_txt, "w");
 
 	/* Test memory access speed */
-	pthread_create(&threads[0], NULL, thr_function[0], NULL);
 	number_of_operations = 0;
 	threadMc = 1;
 	long long file_out, divide;
+	pthread_create(&threads[0], NULL, thr_function[0], NULL);
 	while (threadMc) {
 		divide = 1 + number_of_operations;
-		for (int i = 1; i <= 18; i++) {
+		for (int i = 1; i <= NUMBER_CYCLES; i++) {
 			divide = divide * i;
 			divide++;
 		}
@@ -121,7 +123,7 @@ int main(int argc, char *argv[])
 		fscanf(save_data, "%lld", &file_out);
 		fclose(save_data);
 		save_data = fopen(bench_txt, "w");
-		for (int i = 1; i <= 18; i++) {
+		for (int i = 1; i <= NUMBER_CYCLES; i++) {
 			divide--;
 			divide = divide / i;
 		}
